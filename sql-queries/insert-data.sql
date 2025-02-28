@@ -3,7 +3,7 @@ INSERT INTO speakers (first_name, last_name, email, topic) VALUES
 ('Alice', 'Smith', 'alice.smith@example.com', 'Cybersecurity'),
 ('Bob', 'Johnson', 'bob.johnson@example.com', 'AI & Machine Learning'),
 ('Charlie', 'Brown', 'charlie.brown@example.com', 'Cloud Computing'),
-('Dana', 'Evans', 'dana.williams@example.com', 'Software Engineering'),
+('Dana', 'Evans', 'dana.evans@example.com', 'Software Engineering'),
 ('Betty', 'Brazil', 'betty.brazil@example.com', 'Data Science');
 
 -- Insert Attendees
