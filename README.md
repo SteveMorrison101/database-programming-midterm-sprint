@@ -1,4 +1,4 @@
-# Instructions for Running the Conference CLI Application
+# Instructions for Running the CLI Application
 
 ## Prerequisites
 Before running the CLI application, ensure that following are installed:
