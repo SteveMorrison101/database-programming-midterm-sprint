@@ -1,53 +1,72 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/fhikS8LO)
-# Conference Event Management - Midterm Sprint
-This repository provides the **base template** for your **Midterm Sprint - Individual** project. You will be designing a PostgreSQL database and building a CLI application to interact with it.
+# Instructions for Running the Conference CLI Application
 
-For full project details, requirements, and grading criteria, refer to the [assignment sheet](https://menglishca.github.io/keyin-course-notes/databases/sprints/midterm/).
+## Prerequisites
+Before running the CLI application, ensure that following are installed:
+- Node.js (v14 or later)
+- PostgreSQL (Ensure PostgreSQL service is running)
+- The required dependencies (install using `npm install`)
 
-
-## Key Features
-- **SQL Queries Folder (`sql-queries/`)**:
-  - Place all **table creation, sample data insertion, and retrieval queries** in this folder.
-  - Add your **3NF explanation** here as well.
-  - The following placeholder files have been included to help structure your work, if you wish to use them:
-    - `create-tables.sql` – Suggested file for **table creation queries**.
-    - `insert-data.sql` – Suggested file for **sample data insertion queries**.
-    - `queries.sql` – Suggested file for **queries to retrieve information**.
-    - `normalization-explanation.txt` – Suggested file for your **3NF explanation**.
-  - **These files are optional** and can be removed or reorganized as needed.
-- **CLI Application (`cli-app/`)**:
-  - This folder contains a **skeleton/template** for your CLI application.
-  - The required features and functionality are outlined in the [assignment sheet](https://menglishca.github.io/keyin-course-notes/databases/sprints/midterm/)
-
-## Getting Started (CLI App)
-Follow these steps to set up and run the **CLI application**:
-
-1. **Accept the GitHub Assignment** (link provided in the project sheet).
-2. **Clone Your Repository:**
-   ```bash
-   git clone <your-new-repo-url>
-   cd <your-new-repo-name>
+## Setting Up the Project
+1. **Clone the repository**
    ```
-3. **Navigate into the CLI App Folder:**
-   ```bash
-   cd cli-app
+   git clone https://github.com/SteveMorrison101/database-programming-midterm-sprint.git
+   cd database-programming-midterm-sprint/cli-app
    ```
-4. **Install Dependencies:**
-   ```bash
+
+2. **Install dependencies**:
+   ```
    npm install
    ```
-5. **Run the CLI Application:**
-   ```bash
-   npm start
+
+3. **Ensure PostgreSQL is running**:
    ```
-   The CLI app will execute commands against your PostgreSQL database.
+   psql -U postgres -d conference_db -p 5432
+   ```
 
-## Submission Guidelines
-- **Ensure your application runs without errors.**
-- **All required SQL files and explanations must be in the `sql-queries/` folder.**
-- **Push your completed work to GitHub** before the deadline.
-- **Submit your repository link on Teams** under the appropriate assignment.
+## Running the CLI Application
 
-For any questions, refer to the [assignment sheet](https://menglishca.github.io/keyin-course-notes/databases/sprints/midterm/) or ask on Teams!
+To run the CLI, use the following commands:
 
-Happy coding and good luck!
+### Show all sessions:
+```
+node index.js show
+```
+
+### Insert a new session:
+```
+node index.js insert "Session Title" <speaker_id> "YYYY-MM-DD" "HH:MM"
+```
+Example:
+```
+node index.js insert "Intro to PostgreSQL" 1 "2025-06-13" "09:00"
+```
+
+### Update an attendee's email:
+```
+node index.js update <attendee_id> "new.email@example.com"
+```
+Example:
+```
+node index.js update 2 "updated.email@example.com"
+```
+
+### Remove an attendee:
+```
+node index.js remove <attendee_id>
+```
+Example:
+```
+node index.js remove 5
+```
+
+## Troubleshooting:
+If you encounter any issues:
+- Ensure PostgreSQL is running using:
+  ```
+  psql -U postgres -d conference_db -p 5432
+  ```
+- Check for any missing dependencies and reinstall:
+  ```
+  npm install
+  ```
+- Restart the application and database if needed.
