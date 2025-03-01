@@ -2,19 +2,12 @@ const { Pool } = require('pg');
 
 // PostgreSQL connection
 const pool = new Pool({
-  user: 'postgres', // This _should_ be your username, as it's the default one Postgres uses
+  user: 'postgres', 
   host: 'localhost',
-  database: 'your_database_name', // Change this to reflect your actual database
-  password: 'your_database_password', // Change this to reflect the password you used when setting up Postgres
+  database: 'conference_db', 
+  password: 'mypetsally11', 
   port: 5432,
 });
-
-/**
- * Creates the database tables, if they do not already exist.
- */
-async function createTables() {
-  // TODO: Add code to create Speakers, Attendees, Sessions, and Registrations tables
-};
 
 /**
  * Inserts a new session into the Sessions table.
@@ -25,15 +18,33 @@ async function createTables() {
  * @param {string} time - Time of the session (HH:MM format)
  */
 async function insertSession(title, speakerId, date, time) {
-  // TODO: Add code to insert a new session into the Sessions table
-};
+  const client = await pool.connect();
+  try {
+    const query = `INSERT INTO sessions (title, speaker_id, date_time) VALUES ($1, $2, $3) RETURNING *`;
+    const values = [title, speakerId, `${date} ${time}`];
+    const result = await client.query(query, values);
+    console.log('Session inserted:', result.rows[0]);
+  } catch (err) {
+    console.error('Error inserting session:', err.message);
+  } finally {
+    client.release();
+  }
+}
 
 /**
  * Prints all sessions in the database to the console.
  */
 async function displaySessions() {
-  // TODO: Add code to retrieve and print all sessions from the Sessions table
-};
+  const client = await pool.connect();
+  try {
+    const result = await client.query('SELECT * FROM sessions ORDER BY date_time');
+    console.table(result.rows);
+  } catch (err) {
+    console.error('Error displaying sessions:', err.message);
+  } finally {
+    client.release();
+  }
+}
 
 /**
  * Updates an attendee's email address.
@@ -42,8 +53,22 @@ async function displaySessions() {
  * @param {string} newEmail - New email address of the attendee
  */
 async function updateAttendeeEmail(attendeeId, newEmail) {
-  // TODO: Add code to update an attendee's email address
-};
+  const client = await pool.connect();
+  try {
+    const query = `UPDATE attendees SET email = $1 WHERE id = $2 RETURNING *`;
+    const values = [newEmail, attendeeId];
+    const result = await client.query(query, values);
+    if (result.rowCount > 0) {
+      console.log('Attendee email updated:', result.rows[0]);
+    } else {
+      console.log('Attendee not found.');
+    }
+  } catch (err) {
+    console.error('Error updating attendee email:', err.message);
+  } finally {
+    client.release();
+  }
+}
 
 /**
  * Removes an attendee from the database along with their registrations.
@@ -51,8 +76,24 @@ async function updateAttendeeEmail(attendeeId, newEmail) {
  * @param {number} attendeeId - ID of the attendee to remove
  */
 async function removeAttendee(attendeeId) {
-  // TODO: Add code to remove an attendee and their session registrations
-};
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN'); // Start transaction
+    await client.query('DELETE FROM registrations WHERE attendee_id = $1', [attendeeId]);
+    const result = await client.query('DELETE FROM attendees WHERE id = $1 RETURNING *', [attendeeId]);
+    if (result.rowCount > 0) {
+      console.log('Attendee removed:', result.rows[0]);
+    } else {
+      console.log('Attendee not found.');
+    }
+    await client.query('COMMIT'); // Commit transaction
+  } catch (err) {
+    await client.query('ROLLBACK'); // Rollback in case of error
+    console.error('Error removing attendee:', err.message);
+  } finally {
+    client.release();
+  }
+}
 
 /**
  * Prints a help message to the console.
@@ -69,8 +110,6 @@ function printHelp() {
  * Runs the CLI app to manage the conference event system.
  */
 async function runCLI() {
-  await createTables();
-
   const args = process.argv.slice(2);
   switch (args[0]) {
     case 'insert':
@@ -101,6 +140,7 @@ async function runCLI() {
       printHelp();
       break;
   }
-};
+}
 
 runCLI();
+
