@@ -1,1 +1,28 @@
-Placeholder file, feel free to use or delete.
+A table is in 3NF if the following two criteria are met;
+    1. The table is already in 2NF
+    2. It has no trasitive dependencies (non-key columns only depend on the primary key)
+
+Speakers Table:
+    1. 1NF is satisfied because each column only contains atomic values
+    2. 2NF is satisfied because 1NF is satified and the primary key (id) uniquely identifies each speaker, and all of the non-key attributes 
+    (name, email, topic) depend entirely on id.
+    3. 3NF is satified because 2NF is satisfied and no transitive dependencies exist because every column directly relates to the id and doesn't 
+    depend on any non-key column.
+    
+Attendees Table:
+    1. 1NF is satisfied because each column only contains atomic values
+    2. 2NF is satisfied because 1NF is satified and the primary key (id) uniquely identifies each attendee and no partial dependencies exist
+    3. 3NF is satified because 2NF is satisfied and there are no transitive dependencies, the organization column only depends on the primary key id 
+
+Sessions Table
+    1. 1NF is satisfied because each column only contains atomic values
+    2. 2NF is satisfied because 1NF is satified and the primary key (id) uniquely identifies each session and no speaker_id refers to the speakers 
+    table through a forign key, ensuring no partial dependencies exist
+    3. 3NF is satified because 2NF is satisfied and there are no transitive dependencies, speaker_id/id from speakers is a foreign key reference
+    
+    
+Registrations Table
+    1. 1NF is satisfied because each column only contains atomic values
+    2. 2NF is satisfied because 1NF is satified and the primary key (attendee_id and session_id) defines each registration and no partial dependencies exist    
+    3. 3NF is satified because 2NF is satisfied and no transitive dependencies exist because both columns in the table are foreign keys that 
+    depend primary keys (id from attendees and id from sessions).
